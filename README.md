@@ -1,38 +1,22 @@
-
 WELCOME
 =======
-Congratulations you have just created a new Mule Cloud Connector!
+This is the Mule transport using Netty that supports Publish/Subscribe on raw TCP. Developed by Ricston Ltd (www.ricston.com).
 
-This wizard created a number of new classes and resources useful for Mule
-modules.  Each of the created files contains documentation and TODO
-items where necessary.  Here is an overview of what was created.
+To compile and package from source, just execute: mvn package. This will also generate the Mule Studio plugin.
 
-./pom.xml:
-A maven project descriptor that describes how to build this module.
+All tests are use-cases which you can copy and paste from.
 
-./LICENSE.md:
-The open source license text for this project.
-
-TESTING
-=======
-
-This  project also contains test classes that can be run as part of a test
-suite.
-
-ADDITIONAL RESOURCES
+Minimum Requirements
 ====================
-Everything you need to know about getting started with Mule can be found here:
-http://www.mulesoft.org/documentation/display/MULE3INTRO/Home
 
-There further useful information about extending Mule here:
-http://www.mulesoft.org/documentation/display/DEVKIT/Home
+Mule 3.3.x or higher
+Maven 3.0.3 or higher
 
-Remember if you get stuck you can try getting help on the Mule user list:
-http://www.mulesoft.org/email-lists
+Documentation
+=============
+Please read the following blog post: http://ricston.com/blog//. It explains how to use the module. You can also look at the functional tests cases.
 
-Also, MuleSoft, the company behind Mule, offers 24x7 support options:
-http://www.mulesoft.com/enterprise-subscriptions-and-support
+License
+========
 
-Enjoy your Mule ride!
-
-The Mule Team
+Apache License 2.0 (Please see LICENSE.md)
