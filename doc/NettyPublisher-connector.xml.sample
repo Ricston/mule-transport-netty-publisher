@@ -1,0 +1,7 @@
+<!-- BEGIN_INCLUDE(nettypublisher:publish) -->
+    <nettypublisher:publish publisher="publisher" data="#[map-payload:content]" />
+<!-- END_INCLUDE(nettypublisher:publish) -->
+
+<!-- BEGIN_INCLUDE(nettypublisher:server) -->
+    <nettypublisher:server port="9090" />
+<!-- END_INCLUDE(nettypublisher:server) -->
