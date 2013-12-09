@@ -77,7 +77,7 @@ public class NettyPublisherConnectorTest extends FunctionalTestCase
         RunTcpTest t1 = new RunTcpTest(PUBLISHER1_PORT, CONNECTOR_NAME);
         t1.start();
         
-        runFlowAndExpect("testFlow", NullPayload.getInstance());
+        runFlowWithPayloadAndExpect("testFlow", NullPayload.getInstance(), PAYLOAD);
         
         t1.join();
         Assert.assertEquals(PAYLOAD, t1.getResult());
@@ -95,7 +95,7 @@ public class NettyPublisherConnectorTest extends FunctionalTestCase
         RunTcpTest t2 = new RunTcpTest(PUBLISHER2_PORT, CONNECTOR_NAME);
         t2.start();
         
-        runFlowAndExpect("testFlow2", NullPayload.getInstance());
+        runFlowWithPayloadAndExpect("testFlow2", NullPayload.getInstance(), PAYLOAD);
         
         t1.join();
         Assert.assertEquals(PAYLOAD, t1.getResult());
@@ -112,7 +112,7 @@ public class NettyPublisherConnectorTest extends FunctionalTestCase
     protected <T> void runFlowAndExpect(String flowName, T expect) throws Exception
     {
         Flow flow = lookupFlowConstruct(flowName);
-        MuleEvent event = getTestEvent(PAYLOAD);
+        MuleEvent event = getTestEvent(NullPayload.getInstance());
         MuleEvent responseEvent = flow.process(event);
 
         Assert.assertEquals(expect, responseEvent.getMessage().getPayload());
