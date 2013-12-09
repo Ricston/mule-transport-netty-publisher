@@ -105,10 +105,16 @@ public class NettyPublisherConnector
     @Start
     public synchronized void init() throws InterruptedException
     {
+        logger.info("Initialising Netty Publisher");
         if (!initialised)
         {
             startPublisherServers();
             initialised = true;
+            logger.info("Netty Publisher initialised");
+        }
+        else
+        {
+            logger.info("Netty Publisher was already initialised");
         }
     }
     
@@ -118,6 +124,7 @@ public class NettyPublisherConnector
     @Stop
     public void destroy()
     {
+        logger.info("Stopping Netty Publisher");
         stopAllServers();
     }
     
