@@ -1,6 +1,8 @@
 WELCOME
 =======
-This is the Mule transport implemente using Netty (http://netty.io) that supports Publish/Subscribe on raw TCP. Developed by Ricston Ltd (www.ricston.com).
+This is a Mule transport implementation using Netty (http://netty.io) that supports Publish/Subscribe on raw TCP (from a high level perspective, its like JMS topics, but with limited functionality, for example, there is no transaction support, and there it no external broker). 
+
+Developed by Ricston Ltd (www.ricston.com).
 
 To compile and package from source, just execute: mvn package. This will also generate the Mule Studio plugin.
 
