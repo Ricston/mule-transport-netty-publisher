@@ -20,6 +20,8 @@ import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Optional;
 import org.mule.api.callback.SourceCallback;
 
+import com.ricston.nettypublisher.exception.UnsupportedDataTypeException;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -203,9 +205,10 @@ public class NettyPublisherConnector
      * 
      * @param data Content to be published
      * @param publisher The publisher to publish the data on
+     * @throws UnsupportedDataTypeException thrown when data type to be written is not supported
      */
     @Processor
-    public void publish(String publisher, @Optional @Default(value="#[payload]") String data)
+    public void publish(String publisher, @Optional @Default(value="#[payload]") String data) throws UnsupportedDataTypeException
     {
         List<NettyPublisherHandler> publishers = publisherHandlers.get(publisher);
         

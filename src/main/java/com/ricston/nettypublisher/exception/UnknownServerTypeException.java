@@ -8,7 +8,7 @@
  * LICENSE.txt file.
  */
 
-package com.ricston.nettypublisher;
+package com.ricston.nettypublisher.exception;
 
 public class UnknownServerTypeException extends Exception
 {

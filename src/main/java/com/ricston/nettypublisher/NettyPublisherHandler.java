@@ -12,6 +12,8 @@ package com.ricston.nettypublisher;
 
 import org.mule.util.StringUtils;
 
+import com.ricston.nettypublisher.exception.UnsupportedDataTypeException;
+
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
@@ -45,7 +47,7 @@ public class NettyPublisherHandler extends ChannelInboundHandlerAdapter
         publisherHandlers.remove(this);
     }
     
-    public void publish(String data)
+    public void publish(String data) throws UnsupportedDataTypeException
     {
         if (ctx != null)
         {

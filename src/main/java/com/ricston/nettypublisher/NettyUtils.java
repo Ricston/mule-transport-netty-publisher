@@ -12,6 +12,9 @@ package com.ricston.nettypublisher;
 
 import org.mule.api.callback.SourceCallback;
 
+import com.ricston.nettypublisher.exception.UnknownServerTypeException;
+import com.ricston.nettypublisher.exception.UnsupportedDataTypeException;
+
 import java.util.List;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -75,7 +78,7 @@ public class NettyUtils
         return nettyChannelInfo;
     }
 
-    public static ByteBuf writeToByteBuf(ChannelHandlerContext ctx, Object msg)
+    public static ByteBuf writeToByteBuf(ChannelHandlerContext ctx, Object msg) throws UnsupportedDataTypeException
     {
         if (msg instanceof String)
         {
@@ -90,7 +93,7 @@ public class NettyUtils
             return out;
         }
 
-        return null;
+        throw new UnsupportedDataTypeException(msg);
     }
 
 }
