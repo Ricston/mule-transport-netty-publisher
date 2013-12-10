@@ -1,6 +1,7 @@
 package com.ricston.nettypublisher;
 
 import org.mule.api.callback.SourceCallback;
+import org.mule.util.StringUtils;
 
 import com.ricston.nettypublisher.exception.UnknownServerTypeException;
 import com.ricston.nettypublisher.exception.UnsupportedDataTypeException;
@@ -18,6 +19,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.util.ReferenceCountUtil;
 
 public class NettyUtils
 {
@@ -70,6 +72,11 @@ public class NettyUtils
 
     public static ByteBuf writeToByteBuf(ChannelHandlerContext ctx, Object msg) throws UnsupportedDataTypeException
     {
+        if (msg instanceof org.mule.transport.NullPayload)
+        {
+            return writeToByteBuf(ctx, "");
+        }
+        
         if (msg instanceof String)
         {
             String responseString = (String) msg;
@@ -84,6 +91,26 @@ public class NettyUtils
         }
 
         throw new UnsupportedDataTypeException(msg);
+    }
+    
+    public static String channelRead(ChannelHandlerContext ctx, Object msg)
+    {
+        ByteBuf in = (ByteBuf) msg;
+        String data = null;
+        try
+        {
+            data = in.toString(io.netty.util.CharsetUtil.UTF_8);
+            
+            if (StringUtils.equals(NettyUtils.TERMINATING_STRING, data)){
+                ctx.close();
+            }
+        }
+        finally
+        {
+            ReferenceCountUtil.release(msg);
+        }
+        
+        return data;
     }
 
 }
