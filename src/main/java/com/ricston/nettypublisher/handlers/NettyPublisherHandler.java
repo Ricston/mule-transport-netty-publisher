@@ -1,17 +1,17 @@
-package com.ricston.nettypublisher;
+package com.ricston.nettypublisher.handlers;
 
 import org.mule.util.StringUtils;
 
+import com.ricston.nettypublisher.NettyUtils;
 import com.ricston.nettypublisher.exception.UnsupportedDataTypeException;
-
-import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.ReferenceCountUtil;
 
-public class NettyPublisherHandler extends ChannelInboundHandlerAdapter
+import java.util.List;
+
+public class NettyPublisherHandler extends AbstractNettyInboundHandlerAdapter
 {
     protected ChannelHandlerContext ctx;
     protected List<NettyPublisherHandler> publisherHandlers;
@@ -45,6 +45,7 @@ public class NettyPublisherHandler extends ChannelInboundHandlerAdapter
         }
     }
     
+    @Override
     public void close()
     {
         ctx.close();

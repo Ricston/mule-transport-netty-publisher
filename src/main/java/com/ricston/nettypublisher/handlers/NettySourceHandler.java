@@ -1,13 +1,14 @@
-package com.ricston.nettypublisher;
+package com.ricston.nettypublisher.handlers;
 
 import org.mule.api.callback.SourceCallback;
 
+import com.ricston.nettypublisher.NettyUtils;
+
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 
 import java.util.List;
 
-public class NettySourceHandler extends ChannelInboundHandlerAdapter
+public class NettySourceHandler extends AbstractNettyInboundHandlerAdapter
 {
     protected SourceCallback source;
     protected ChannelHandlerContext ctx;
@@ -52,6 +53,7 @@ public class NettySourceHandler extends ChannelInboundHandlerAdapter
         ctx.close();
     }
     
+    @Override
     public void close()
     {
         ctx.close();

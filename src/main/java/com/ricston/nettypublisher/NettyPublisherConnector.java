@@ -21,6 +21,8 @@ import org.mule.api.annotations.param.Optional;
 import org.mule.api.callback.SourceCallback;
 
 import com.ricston.nettypublisher.exception.UnsupportedDataTypeException;
+import com.ricston.nettypublisher.handlers.NettyPublisherHandler;
+import com.ricston.nettypublisher.handlers.NettySourceHandler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,14 +55,14 @@ public class NettyPublisherConnector
     private Map<String, Integer> publishers;
 
     /**
-     * A list of handlers for each publisher. Publishers are keyed by name.
+     * A NettyChannelInfo with a list of handlers for each publisher. Publishers are keyed by name.
      */
-    protected Map<String, List<NettyPublisherHandler>> publisherHandlers = new HashMap<String, List<NettyPublisherHandler>>();
+    protected Map<String, NettyChannelInfo<NettyPublisherHandler>> publisherHandlers = new HashMap<String, NettyChannelInfo<NettyPublisherHandler>>();
     
     /**
-     * A list of source handles.
+     * NettyChannelInfo that contains a list of source handles.
      */
-    protected List<NettySourceHandler> sourceHandlers = new ArrayList<NettySourceHandler>();
+    protected NettyChannelInfo<NettySourceHandler> sourceHandlers = new NettyChannelInfo<NettySourceHandler>();
     
     protected boolean initialised = false;
 
@@ -122,9 +124,10 @@ public class NettyPublisherConnector
     
     /**
      * Close all servers (inbound endpoints) and pub/sub servers
+     * @throws InterruptedException Exception while stopping servers
      */
     @Stop
-    public void destroy()
+    public void destroy() throws InterruptedException
     {
         logger.info("Stopping Netty Publisher");
         stopAllServers();
@@ -144,13 +147,10 @@ public class NettyPublisherConnector
                 // get the publisher name and port which would have been configured in the XML
                 String publisherName = publisher.getKey();
                 Integer port = publisher.getValue();
-
-                // create a new list of handlers for each publisher
-                List<NettyPublisherHandler> publisherHandlerList = new ArrayList<NettyPublisherHandler>();
-                publisherHandlers.put(publisherName, publisherHandlerList);
-
+                
                 // start the server as publisher
-                NettyUtils.startServer(port, ServerType.PUBLISHER, null, null, publisherHandlerList);
+                NettyChannelInfo<NettyPublisherHandler> channelInfo = NettyUtils.startServer(port, ServerType.PUBLISHER, null, new ArrayList<NettyPublisherHandler>());
+                publisherHandlers.put(publisherName, channelInfo);
 
                 logger.info("Netty server started publisher on port " + port);
             }
@@ -159,23 +159,18 @@ public class NettyPublisherConnector
     
     /**
      * Close all servers (inbound endpoints) and pub/sub servers
+     * @throws InterruptedException Exception while stopping
      */
-    protected void stopAllServers()
+    protected void stopAllServers() throws InterruptedException
     {
         //close all servers (inbound endpoints) and associated connections
-        for(NettySourceHandler sourceHandler : sourceHandlers)
-        {
-            sourceHandler.close();
-            logger.info("Netty server closing listener");
-        }
+        sourceHandlers.closeAll();
+        logger.info("Netty server closing listener");
         
         //close all publishers and the connections associated with each publisher
-        for (Map.Entry<String, List<NettyPublisherHandler>> publisherHandler : publisherHandlers.entrySet())
+        for (Map.Entry<String, NettyChannelInfo<NettyPublisherHandler>> channelInfo : publisherHandlers.entrySet())
         {
-            for (NettyPublisherHandler publisher : publisherHandler.getValue())
-            {
-                publisher.close();
-            }
+            channelInfo.getValue().closeAll();
             logger.info("Netty server closing publisher");
         }
     }
@@ -210,7 +205,7 @@ public class NettyPublisherConnector
     @Processor
     public void publish(String publisher, @Optional @Default(value="#[payload]") String data) throws UnsupportedDataTypeException
     {
-        List<NettyPublisherHandler> publishers = publisherHandlers.get(publisher);
+        List<NettyPublisherHandler> publishers = publisherHandlers.get(publisher).getChannelInboundHandlers();
         
         for(NettyPublisherHandler publisherHandler : publishers)
         {
@@ -230,7 +225,7 @@ public class NettyPublisherConnector
     @Source
     public void server(Integer port, SourceCallback callback) throws InterruptedException
     {
-        NettyUtils.startServer(port, ServerType.SOURCE, callback, sourceHandlers, null);
+        NettyUtils.startServer(port, ServerType.SOURCE, callback, new ArrayList<NettySourceHandler>());
         logger.info("Netty server started listening on port " + port);
     }
     

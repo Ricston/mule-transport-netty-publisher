@@ -5,6 +5,9 @@ import org.mule.util.StringUtils;
 
 import com.ricston.nettypublisher.exception.UnknownServerTypeException;
 import com.ricston.nettypublisher.exception.UnsupportedDataTypeException;
+import com.ricston.nettypublisher.handlers.AbstractNettyInboundHandlerAdapter;
+import com.ricston.nettypublisher.handlers.NettyPublisherHandler;
+import com.ricston.nettypublisher.handlers.NettySourceHandler;
 
 import java.util.List;
 
@@ -26,12 +29,11 @@ import io.netty.util.ReferenceCountUtil;
 public class NettyUtils
 {
     public static final String TERMINATING_STRING = "^]\r\n";
-
-    public static NettyChannelInfo startServer(Integer port,
+    
+    public static <T extends AbstractNettyInboundHandlerAdapter> NettyChannelInfo<T> startServer(Integer port,
                                                final ServerType serverType,
                                                final SourceCallback callback,
-                                               final List<NettySourceHandler> sourceHandlers,
-                                               final List<NettyPublisherHandler> publisherHandlers) throws InterruptedException
+                                               final List<T> handlers) throws InterruptedException
     {
         EventLoopGroup bossGroup = new NioEventLoopGroup();
         EventLoopGroup workerGroup = new NioEventLoopGroup();
@@ -41,6 +43,7 @@ public class NettyUtils
             .channel(NioServerSocketChannel.class)
             .childHandler(new ChannelInitializer<SocketChannel>()
             {
+                @SuppressWarnings("unchecked")
                 @Override
                 public void initChannel(SocketChannel ch) throws Exception
                 {
@@ -49,10 +52,10 @@ public class NettyUtils
                     switch (serverType)
                     {
                         case SOURCE :
-                            handler = new NettySourceHandler(callback, sourceHandlers);
+                            handler = new NettySourceHandler(callback, (List<NettySourceHandler>)handlers);
                             break;
                         case PUBLISHER :
-                            handler = new NettyPublisherHandler(publisherHandlers);
+                            handler = new NettyPublisherHandler((List<NettyPublisherHandler>)handlers);
                             break;
                         default:
                             throw new UnknownServerTypeException(serverType.name());
@@ -68,7 +71,7 @@ public class NettyUtils
         // Bind and start to accept incoming connections.
         ChannelFuture serverChannel = bootstrap.bind(port).sync();
 
-        NettyChannelInfo nettyChannelInfo = new NettyChannelInfo(bossGroup, workerGroup, serverChannel);
+        NettyChannelInfo<T> nettyChannelInfo = new NettyChannelInfo<T>(bossGroup, workerGroup, serverChannel, handlers);
         return nettyChannelInfo;
     }
     
@@ -93,7 +96,7 @@ public class NettyUtils
         // Connect to server.
         ChannelFuture clientChannel = bootstrap.connect(host, port).sync();
 
-        NettyChannelInfo nettyChannelInfo = new NettyChannelInfo(null, workerGroup, clientChannel);
+        NettyChannelInfo nettyChannelInfo = new NettyChannelInfo(null, workerGroup, clientChannel, null);
         return nettyChannelInfo;
     }
 
