@@ -4,24 +4,25 @@ This is a Mule transport implementation using Netty (http://netty.io) that suppo
 
 Developed by Ricston Ltd (www.ricston.com).
 
-To compile and package from source, just execute: mvn package. This will also generate the Mule Studio plugin.
+To compile and package from source, just execute: 
+
+```Shell
+mvn package 
+```
+
+Make sure you have the minimum requirements mentioned here below. The above command will also generate the Mule Studio plugin.
 
 All tests are use-cases which you can copy and paste from.
 
 Minimum Requirements
 ====================
 
-Mule 3.3.x or higher
-Maven 3.0.3 or higher
+Mule 3.3.x or higher,
+Maven 3.0.3 or higher (only required for compilation, not required for runtime)
 
 Documentation
 =============
 Please read the following blog post: http://ricston.com/blog/mule-netty-publisher/. It explains how to use the module. You can also look at the functional tests cases.
-
-License
-========
-
-Apache License 2.0 (Please see LICENSE.md)
 
 Connector Configuration Example
 ===============================
@@ -63,3 +64,8 @@ Starting a Netty Server
     <!-- your message procesors here -->
 </flow>
 ```
+
+License
+========
+
+Apache License 2.0 (Please see LICENSE.md)
