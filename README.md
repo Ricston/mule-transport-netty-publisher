@@ -4,14 +4,20 @@ This is a Mule transport implementation using Netty (http://netty.io) that suppo
 
 Developed by Ricston Ltd (www.ricston.com).
 
-To compile and package from source, just execute: mvn package. This will also generate the Mule Studio plugin.
+To compile and package from source, just execute: 
+
+```Shell
+mvn package 
+```
+
+Make sure you have the minimum requirements mentioned here below. The above command will also generate the Mule Studio plugin.
 
 All tests are use-cases which you can copy and paste from.
 
 Minimum Requirements
 ====================
 
-Mule 3.3.x or higher
+Mule 3.3.x or higher,
 Maven 3.0.3 or higher
 
 Documentation
