@@ -26,6 +26,7 @@ Apache License 2.0 (Please see LICENSE.md)
 Connector Configuration Example
 ===============================
 
+```XML
 <nettypublisher:config name="nettyPublisher" nettyPublisherName="nettyPublisher">
 	<!-- configure publishers here -->
 	<nettypublisher:publishers>
@@ -34,10 +35,12 @@ Connector Configuration Example
 		<nettypublisher:publisher key="publisher2">8092</nettypublisher:publisher>
 	</nettypublisher:publishers>
 </nettypublisher:config>
+```
 
 Publishing information
 ======================
 
+```XML
 <!-- simple flow that receives messages on a VM endpoint and publishes to all 
 clients connected to publisher1 (port 8091 from the connector configuration) -->
 <flow name="nettyPublisherFlow">
@@ -45,10 +48,12 @@ clients connected to publisher1 (port 8091 from the connector configuration) -->
     <logger message="#[payload]" level="INFO" />
     <nettypublisher:publish publisher="publisher1" data="#[payload]"/>
 </flow>
+```
 
 Starting a Netty Server
 =======================
 
+```XML
 <!-- this will start a Netty server on port 8090, each message received will trigger
  this flow. You can configure any Mule processor as in a normal Mule flow -->
 <flow name="nettyServerFlow">
@@ -57,3 +62,4 @@ Starting a Netty Server
     
     <!-- your message procesors here -->
 </flow>
+```
