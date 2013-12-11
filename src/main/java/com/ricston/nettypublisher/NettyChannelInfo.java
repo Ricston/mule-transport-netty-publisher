@@ -8,7 +8,7 @@ public class NettyChannelInfo
 {
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
-    private ChannelFuture serverChannel;
+    private ChannelFuture channel;
 
     public NettyChannelInfo()
     {
@@ -20,14 +20,14 @@ public class NettyChannelInfo
         super();
         this.bossGroup = bossGroup;
         this.workerGroup = workerGroup;
-        this.serverChannel = serverChannel;
+        this.channel = serverChannel;
     }
 
-    public void closeServer() throws InterruptedException
+    public void closeAll() throws InterruptedException
     {
-        if (serverChannel != null)
+        if (channel != null)
         {
-            serverChannel.channel().closeFuture().sync();
+            channel.channel().closeFuture().sync();
         }
 
         if (workerGroup != null)
@@ -61,14 +61,14 @@ public class NettyChannelInfo
         this.workerGroup = workerGroup;
     }
 
-    public ChannelFuture getServerChannel()
+    public ChannelFuture getChannel()
     {
-        return serverChannel;
+        return channel;
     }
 
-    public void setServerChannel(ChannelFuture serverChannel)
+    public void setChannel(ChannelFuture serverChannel)
     {
-        this.serverChannel = serverChannel;
+        this.channel = serverChannel;
     }
 
 }
