@@ -16,7 +16,7 @@ Maven 3.0.3 or higher
 
 Documentation
 =============
-Please read the following blog post: http://ricston.com/blog//. It explains how to use the module. You can also look at the functional tests cases.
+Please read the following blog post: http://ricston.com/blog/mule-netty-publisher/. It explains how to use the module. You can also look at the functional tests cases.
 
 License
 ========
