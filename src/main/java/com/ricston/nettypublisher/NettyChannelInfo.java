@@ -1,3 +1,4 @@
+
 package com.ricston.nettypublisher;
 
 import io.netty.channel.ChannelFuture;
@@ -21,12 +22,23 @@ public class NettyChannelInfo
         this.workerGroup = workerGroup;
         this.serverChannel = serverChannel;
     }
-    
+
     public void closeServer() throws InterruptedException
     {
-        serverChannel.channel().closeFuture().sync();
-        workerGroup.shutdownGracefully();
-        bossGroup.shutdownGracefully();
+        if (serverChannel != null)
+        {
+            serverChannel.channel().closeFuture().sync();
+        }
+
+        if (workerGroup != null)
+        {
+            workerGroup.shutdownGracefully();
+        }
+
+        if (bossGroup != null)
+        {
+            bossGroup.shutdownGracefully();
+        }
     }
 
     public EventLoopGroup getBossGroup()
