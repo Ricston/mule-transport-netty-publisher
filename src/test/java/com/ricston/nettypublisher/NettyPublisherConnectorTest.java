@@ -5,6 +5,7 @@ import org.mule.api.MuleEvent;
 import org.mule.api.MuleMessage;
 import org.mule.api.client.MuleClient;
 import org.mule.construct.Flow;
+import org.mule.tck.functional.FunctionalTestComponent;
 import org.mule.tck.junit4.FunctionalTestCase;
 import org.mule.transport.NullPayload;
 
@@ -65,7 +66,7 @@ public class NettyPublisherConnectorTest extends FunctionalTestCase
     }
 
     @Test
-    public void testFlow() throws Exception
+    public void testFlowPublisher1() throws Exception
     {
         //Allow servers to start
         Thread.sleep(1000);
@@ -73,14 +74,14 @@ public class NettyPublisherConnectorTest extends FunctionalTestCase
         RunTcpTest t1 = new RunTcpTest(PUBLISHER1_PORT, CONNECTOR_NAME);
         t1.start();
         
-        runFlowWithPayloadAndExpect("testFlow", NullPayload.getInstance(), PAYLOAD);
+        runFlowWithPayloadAndExpect("testFlowPublisher1", NullPayload.getInstance(), PAYLOAD);
         
         t1.join();
         Assert.assertEquals(PAYLOAD, t1.getResult());
     }
     
     @Test
-    public void testFlow2() throws Exception
+    public void testFlowPublisher2() throws Exception
     {
         //Allow servers to start
         Thread.sleep(1000);
@@ -91,12 +92,29 @@ public class NettyPublisherConnectorTest extends FunctionalTestCase
         RunTcpTest t2 = new RunTcpTest(PUBLISHER2_PORT, CONNECTOR_NAME);
         t2.start();
         
-        runFlowWithPayloadAndExpect("testFlow2", NullPayload.getInstance(), PAYLOAD);
+        runFlowWithPayloadAndExpect("testFlowPublisher2", NullPayload.getInstance(), PAYLOAD);
         
         t1.join();
         Assert.assertEquals(PAYLOAD, t1.getResult());
         t2.join();
         Assert.assertEquals(PAYLOAD, t2.getResult());
+    }
+    
+    @Test
+    public void testFlowWriter() throws Exception
+    {
+        int repeat = 10;
+        
+        for (int i=0; i<repeat; i++)
+        {
+            runFlowWithPayloadAndExpect("testFlowClient", PAYLOAD, PAYLOAD);
+        }
+        
+        //Allow client to call server (async)
+        Thread.sleep(1000);
+        
+        FunctionalTestComponent testComponent = this.getFunctionalTestComponent("tcpServerFlow");
+        Assert.assertEquals(repeat, testComponent.getReceivedMessagesCount());
     }
 
     /**

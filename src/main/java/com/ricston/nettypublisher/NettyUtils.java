@@ -8,6 +8,7 @@ import com.ricston.nettypublisher.exception.UnsupportedDataTypeException;
 
 import java.util.List;
 
+import io.netty.bootstrap.Bootstrap;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelFuture;
@@ -19,6 +20,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.util.ReferenceCountUtil;
 
 public class NettyUtils
@@ -67,6 +69,31 @@ public class NettyUtils
         ChannelFuture serverChannel = bootstrap.bind(port).sync();
 
         NettyChannelInfo nettyChannelInfo = new NettyChannelInfo(bossGroup, workerGroup, serverChannel);
+        return nettyChannelInfo;
+    }
+    
+    public static NettyChannelInfo startClient(String host, Integer port, final NettyClientHandler handler) throws InterruptedException
+    {
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
+
+        Bootstrap bootstrap = new Bootstrap();
+        bootstrap.group(workerGroup)
+            .channel(NioSocketChannel.class)
+            .option(ChannelOption.SO_KEEPALIVE, true)
+            .handler(new ChannelInitializer<SocketChannel>()
+            {
+                @Override
+                public void initChannel(SocketChannel ch) throws Exception
+                {
+                    ch.pipeline().addLast(handler);
+                }
+                
+            });
+
+        // Connect to server.
+        ChannelFuture clientChannel = bootstrap.connect(host, port).sync();
+
+        NettyChannelInfo nettyChannelInfo = new NettyChannelInfo(null, workerGroup, clientChannel);
         return nettyChannelInfo;
     }
 

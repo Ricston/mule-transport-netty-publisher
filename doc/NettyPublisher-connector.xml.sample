@@ -5,3 +5,7 @@
 <!-- BEGIN_INCLUDE(nettypublisher:server) -->
     <nettypublisher:server port="9090" />
 <!-- END_INCLUDE(nettypublisher:server) -->
+
+<!-- BEGIN_INCLUDE(nettypublisher:write) -->
+    <nettypublisher:write host="localhost" port="9090" />
+<!-- END_INCLUDE(nettypublisher:write) -->

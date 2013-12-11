@@ -234,8 +234,22 @@ public class NettyPublisherConnector
         logger.info("Netty server started listening on port " + port);
     }
     
-    public void write(String host, Integer port, @Default(value="#[payload]") String data)
+    /**
+     * To be used as a TCP client. Writes data to a TCP server
+     * 
+     * {@sample.xml../../../doc/NettyPublisher-connector.xml.sample nettypublisher:write}
+     * @param host The host of the server
+     * @param port The port of the server
+     * @param data The data to  be written
+     * @throws Exception Anything that goes wrong
+     */
+    @Processor
+    public void write(String host, Integer port, @Optional @Default(value="#[message.payload]") String data) throws Exception
     {
-        
+        NettyClientHandler clientHandler = new NettyClientHandler();
+        NettyChannelInfo channelInfo = NettyUtils.startClient(host, port, clientHandler);
+        clientHandler.writeToServer(data);
+        clientHandler.close();
+        channelInfo.getWorkerGroup().shutdownGracefully();
     }
 }

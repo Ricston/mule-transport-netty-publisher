@@ -17,7 +17,7 @@
     	</nettypublisher:publishers>
     </nettypublisher:config>
 
-    <flow name="testFlow" processingStrategy="synchronous">
+    <flow name="testFlowPublisher1" processingStrategy="synchronous">
         <nettypublisher:server port="8090"/>
         <logger message="#[payload]" level="INFO" />
         
@@ -26,7 +26,7 @@
         <expression-transformer expression="org.mule.transport.NullPayload.getInstance()"/>
     </flow>
     
-    <flow name="testFlow2">
+    <flow name="testFlowPublisher2">
         <logger message="#[payload]" level="INFO" />
         
         <all>
@@ -36,6 +36,11 @@
        	</all>
        	
        	<expression-transformer expression="org.mule.transport.NullPayload.getInstance()"/>
+    </flow>
+    
+    <flow name="testFlowClient">
+    	<logger message="#[payload]" level="INFO" />
+    	<nettypublisher:write host="localhost" port="8099" />
     </flow>
 
 </mule>
