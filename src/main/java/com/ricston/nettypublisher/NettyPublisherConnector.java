@@ -42,7 +42,7 @@ import org.apache.commons.logging.LogFactory;
  * 
  * @author Ricston Ltd.
  */
-@Connector(name = "nettypublisher", schemaVersion = "1.0-SNAPSHOT")
+@Connector(name = "nettypublisher", schemaVersion = "1.0-SNAPSHOT", friendlyName="Netty Publisher")
 public class NettyPublisherConnector
 {
 
@@ -53,6 +53,12 @@ public class NettyPublisherConnector
      */
     @Configurable
     private Map<String, Integer> publishers;
+
+    /**
+     * For backward compatibility, ignored
+     */
+    @Configurable
+    private String nettyPublisherName;
 
     /**
      * A NettyChannelInfo with a list of handlers for each publisher. Publishers are keyed by name.
@@ -83,23 +89,41 @@ public class NettyPublisherConnector
     {
         this.publishers = publishers;
     }
+
+    /**
+     * 
+     * @return A name for this netty publisher
+     */
+    public String getNettyPublisherName()
+    {
+        return nettyPublisherName;
+    }
+
+    /**
+     * 
+     * @param nettyPublisherName A name for this netty publisher
+     */
+    public void setNettyPublisherName(String nettyPublisherName)
+    {
+        this.nettyPublisherName = nettyPublisherName;
+    }
     
     /**
      * @param nettyPublisherName Name of the connector
      * @throws ConnectionException
      */
-    @Connect
-    public void connect(@ConnectionKey String nettyPublisherName) throws ConnectionException
-    {
-    }
+    //@Connect
+    //public void connect(@ConnectionKey String nettyPublisherName) throws ConnectionException
+    //{
+    //}
 
     /**
      * 
      */
-    @Disconnect
-    public void disconnect()
-    {
-    }
+    //@Disconnect
+    //public void disconnect()
+    //{
+    //}
     
     /**
      * Start all pub/sub servers.
@@ -178,20 +202,20 @@ public class NettyPublisherConnector
     /**
      * Are we connected
      */
-    @ValidateConnection
-    public boolean isConnected()
-    {
-        return true;
-    }
+    //@ValidateConnection
+    //public boolean isConnected()
+    //{
+     //   return true;
+    //}
 
     /**
      * Are we connected
      */
-    @ConnectionIdentifier
-    public String connectionId()
-    {
-        return "001";
-    }
+    //@ConnectionIdentifier
+    //public String connectionId()
+    //{
+    //    return "001";
+    //}
 
     /**
      * Publishes the data on all clients connected on the publisher.
@@ -203,7 +227,7 @@ public class NettyPublisherConnector
      * @throws UnsupportedDataTypeException thrown when data type to be written is not supported
      */
     @Processor
-    public void publish(String publisher, @Optional @Default(value="#[payload]") String data) throws UnsupportedDataTypeException
+    public void publish(String publisher, @Default(value="#[payload]") String data) throws UnsupportedDataTypeException
     {
         List<NettyPublisherHandler> publishers = publisherHandlers.get(publisher).getChannelInboundHandlers();
         
@@ -239,7 +263,7 @@ public class NettyPublisherConnector
      * @throws Exception Anything that goes wrong
      */
     @Processor
-    public void write(String host, Integer port, @Optional @Default(value="#[message.payload]") String data) throws Exception
+    public void write(String host, Integer port, @Default(value="#[message.payload]") String data) throws Exception
     {
         NettyClientHandler clientHandler = new NettyClientHandler();
         NettyChannelInfo channelInfo = NettyUtils.startClient(host, port, clientHandler);

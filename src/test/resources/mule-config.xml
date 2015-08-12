@@ -18,10 +18,10 @@
     </nettypublisher:config>
 
     <flow name="testFlowPublisher1" processingStrategy="synchronous">
-        <nettypublisher:server port="8090"/>
+        <nettypublisher:server port="8090" config-ref="nettyPublisher"/>
         <logger message="#[payload]" level="INFO" />
         
-       	<nettypublisher:publish publisher="publisher1" data="#[payload]"/>
+       	<nettypublisher:publish publisher="publisher1" data="#[payload]" config-ref="nettyPublisher" />
         
         <expression-transformer expression="org.mule.transport.NullPayload.getInstance()"/>
     </flow>
@@ -31,8 +31,8 @@
         
         <all>
         	<!-- data="#[payload]" is the default for publish -->
-       		<nettypublisher:publish publisher="publisher1" />
-       		<nettypublisher:publish publisher="publisher2" />
+       		<nettypublisher:publish publisher="publisher1" config-ref="nettyPublisher"/>
+       		<nettypublisher:publish publisher="publisher2" config-ref="nettyPublisher"/>
        	</all>
        	
        	<expression-transformer expression="org.mule.transport.NullPayload.getInstance()"/>
@@ -40,7 +40,7 @@
     
     <flow name="testFlowClient">
     	<logger message="#[payload]" level="INFO" />
-    	<nettypublisher:write host="localhost" port="8099" />
+    	<nettypublisher:write host="localhost" port="8099" config-ref="nettyPublisher"/>
     </flow>
 
 </mule>
