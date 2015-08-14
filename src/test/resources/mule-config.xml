@@ -7,10 +7,10 @@
       xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
         http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-        http://www.mulesoft.org/schema/mule/nettypublisher http://www.mulesoft.org/schema/mule/nettypublisher/1.0-SNAPSHOT/mule-nettypublisher.xsd">
+        http://www.mulesoft.org/schema/mule/nettypublisher http://www.mulesoft.org/schema/mule/nettypublisher/current/mule-nettypublisher.xsd">
 
         
-    <nettypublisher:config name="nettyPublisher" nettyPublisherName="nettyPublisher">
+    <nettypublisher:config name="nettyPublisher">
     	<nettypublisher:publishers>
     		<nettypublisher:publisher key="publisher1">8091</nettypublisher:publisher>
     		<nettypublisher:publisher key="publisher2">8092</nettypublisher:publisher>
