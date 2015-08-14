@@ -36,7 +36,7 @@ public class NettyChannelInfo <T extends AbstractNettyInboundHandlerAdapter>
     {
         if (channel != null)
         {
-            channel.channel().closeFuture().sync();
+            channel.channel().close();
         }
 
         if (workerGroup != null)
