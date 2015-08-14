@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.ricston</groupId>
 	<artifactId>mule-transport-netty-publisher</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.1-SNAPSHOT</version>
 	<packaging>mule-module</packaging>
 	<name>Mule Cloud Connector</name>
 
@@ -21,12 +21,8 @@
 		<junit.version>4.9</junit.version>
 		<mockito.version>1.8.2</mockito.version>
 		<devkit.studio.package.skip>false</devkit.studio.package.skip>
-		<netty.version>4.0.10.Final</netty.version>
+		<netty.version>4.0.30.Final</netty.version>
 	</properties>
-
-
-
-	
 
 	<dependencies>
 		<dependency>
