@@ -28,7 +28,7 @@ Connector Configuration Example
 ===============================
 
 ```XML
-<nettypublisher:config name="nettyPublisher" nettyPublisherName="nettyPublisher">
+<nettypublisher:config name="nettyPublisher">
 	<!-- configure publishers here -->
 	<nettypublisher:publishers>
 		<!-- we have 2 different publishers, listening on ports 8091 and 8092 -->
